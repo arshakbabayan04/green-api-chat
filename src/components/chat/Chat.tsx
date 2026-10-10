@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { IMessage } from "../../types/message";
 import { useHttp } from "../../hooks/http.hook";
-import { sendMessage } from "../../services/greenApi";
+import { sendMessage, getMessages, deleteNotification } from "../../services/greenApi";
 
 interface ChatProps {
   chatId: string;
@@ -42,6 +42,65 @@ const Chat = ({ chatId, idInstance, apiTokenInstance }: ChatProps) => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchMessages = async () => {
+      console.log("Polling...");
+      try {
+        const notification = await getMessages(
+          request,
+          idInstance,
+          apiTokenInstance
+        );
+
+        console.log("Received notification:", notification);
+
+        if (
+          notification &&
+          notification.body.senderData.chatId === chatId &&
+          notification.body.messageData?.typeMessage === "textMessage"
+        ) {
+          const text =
+            notification.body.messageData.textMessageData?.textMessage;
+
+          if (text) {
+            const newMessage: IMessage = {
+              id: notification.body.idMessage,
+              content: text,
+              sender: "other",
+              timestamp: notification.body.timestamp * 1000,
+            };
+
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+          }
+        }
+        if (notification) {
+          await deleteNotification(
+            request,
+            idInstance,
+            apiTokenInstance,
+            notification.receiptId
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+
+    const pollMessages = async () => {
+      while (isActive) {
+        await fetchMessages();
+      }
+    };
+
+    void pollMessages();
+
+    return () => {
+      isActive = false;
+    };
+  }, [request, idInstance, apiTokenInstance, chatId]);
+
   return ( 
     <div className="flex justify-center lg:justify-start items-start lg:items-center mt-5 lg:mt-0 h-5/6 lg:w-1/2">
       <div id="chat-content" className="h-full w-full max-md:mx-auto bg-regal-blue backdrop-blur-sm border border-white/10 rounded-xl p-8">
@@ -55,7 +114,7 @@ const Chat = ({ chatId, idInstance, apiTokenInstance }: ChatProps) => {
               const isMe = message.sender === 'me';
               return (
                 <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`} key={message.id}>
-                  <div className={`${isMe ? 'bg-[#333333]' : 'bg-white'} px-3 py-2 text-${isMe ? 'white' : 'gray-700'} rounded-2xl rounded-${isMe ? 'br-none' : 'bl-none'} shadow-md`}>
+                  <div className={`${isMe ? 'bg-[#333333]' : 'bg-[#444444]'} px-3 py-2 text-${isMe ? 'white' : 'black'} rounded-2xl rounded-${isMe ? 'br-none' : 'bl-none'} shadow-md`}>
                     {message.content}
                   </div>
                 </div>

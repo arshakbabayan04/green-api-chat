@@ -4,12 +4,35 @@ interface SendMessageResponse {
   idMessage: string;
 }
 
-type HttpRequest = (
+interface Notification {
+  receiptId: number;
+  body: {
+    idMessage: string;
+    typeWebhook: string;
+    senderData: {
+      chatId: string;
+    };
+    messageData?: {
+      typeMessage: string;
+      textMessageData?: {
+        textMessage: string;
+      };
+    };
+    timestamp: number;
+  };
+}
+
+interface DeleteNotificationResponse {
+  result: boolean;
+  reason: string;
+}
+
+type HttpRequest = <T = unknown>(
   url: string,
   method?: string,
   body?: string | null,
   headers?: Record<string, string>
-) => Promise<SendMessageResponse>;
+) => Promise<T>;
 
 export const sendMessage = (
   request: HttpRequest,
@@ -20,9 +43,34 @@ export const sendMessage = (
 ) => {
   const url = `${API_URL}/waInstance${idInstance}/sendMessage/${apiTokenInstance}`;
 
-  return request(
+  return request<SendMessageResponse>(
     url,
     "POST",
     JSON.stringify({ chatId, message })
   );
 };
+
+export const getMessages = (
+  request: HttpRequest, 
+  idInstance: string, 
+  apiTokenInstance: string, 
+  receiveTimeout = 5
+) => {
+  const url = `${API_URL}/waInstance${idInstance}` +
+    `/receiveNotification/${apiTokenInstance}` +
+    `?receiveTimeout=${receiveTimeout}`;
+
+  return request<Notification | null>(url);
+}
+
+export const deleteNotification = (
+  request: HttpRequest,
+  idInstance: string,
+  apiTokenInstance: string,
+  receiptId: number
+) => {
+  const url = `${API_URL}/waInstance${idInstance}` +
+    `/deleteNotification/${apiTokenInstance}/${receiptId}`;
+  
+  return request<DeleteNotificationResponse>(url, "DELETE");
+}
