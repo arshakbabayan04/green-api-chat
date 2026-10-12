@@ -19,10 +19,9 @@ const Chat = ({ chatId, idInstance, apiTokenInstance }: ChatProps) => {
     const text = content.trim();
 
     if (!text) return;
-    console.log(`New message: ${content}`);
 
     try { 
-      const result =await sendMessage(request, idInstance, apiTokenInstance, chatId, content);
+      const result = await sendMessage(request, idInstance, apiTokenInstance, chatId, content);
 
       const newMessage: IMessage = {
         id: result.idMessage,
@@ -39,10 +38,6 @@ const Chat = ({ chatId, idInstance, apiTokenInstance }: ChatProps) => {
   }
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  useEffect(() => {
     let isActive = true;
 
     const fetchMessages = async () => {
@@ -53,8 +48,6 @@ const Chat = ({ chatId, idInstance, apiTokenInstance }: ChatProps) => {
           idInstance,
           apiTokenInstance
         );
-
-        console.log("Received notification:", notification);
 
         if (
           notification &&
@@ -101,32 +94,36 @@ const Chat = ({ chatId, idInstance, apiTokenInstance }: ChatProps) => {
     };
   }, [request, idInstance, apiTokenInstance, chatId]);
 
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return ( 
-    <div className="flex justify-center lg:justify-start items-start lg:items-center mt-5 lg:mt-0 h-5/6 lg:w-1/2">
-      <div id="chat-content" className="h-full w-full max-md:mx-auto bg-regal-blue backdrop-blur-sm border border-white/10 rounded-xl p-8">
+    <div className="flex justify-center lg:justify-start items-start lg:items-center mt-5 lg:mt-0 h-5/6 w-full sm:w-3/4 lg:w-1/2">
+      <div id="chat-content" className="h-full w-full max-md:mx-auto bg-regal-blue backdrop-blur-md border border-white/10 sm:rounded-xl p-8">
         <div className="flex flex-col divide-y divide-white/10 h-full">
           <div className="flex p-2">
-            <div className="font-medium text-md">{`Chat Id: ${chatId}`}</div>
+            <div className="font-medium text-lg">{`Chat Id: ${chatId}`}</div>
           </div>
 
           <div className="flex-1 min-h-0 bg-transparent p-5 space-y-3 shadow-inner overflow-y-auto scrollbar-thumb-sky-700 scrollbar-track-black scrollbar-none">
-            {messages.map((message) => {
+            {messages.length ? messages.map((message) => {
               const isMe = message.sender === 'me';
               return (
                 <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`} key={message.id}>
-                  <div className={`${isMe ? 'bg-[#333333]' : 'bg-[#444444]'} px-3 py-2 text-${isMe ? 'white' : 'black'} rounded-2xl rounded-${isMe ? 'br-none' : 'bl-none'} shadow-md`}>
+                  <div className={isMe ? `bg-linear-to-r from-green-900 to-green-600 px-3 py-2 text-emerald-100 rounded-2xl rounded-br-none shadow-black/20 shadow-md max-w-[70%] break-all` : `bg-linear-to-r from-slate-800 to-slate-700 text-slate-100 px-3 py-2 rounded-2xl rounded-bl-none shadow-black/20 shadow-md max-w-[70%] break-all`}>
                     {message.content}
                   </div>
                 </div>
               )
-            })}
+            }) : <p className="text-white/60 text-center">No messages yet</p>}
             <div ref={bottomRef} />
           </div>
 
-          <div className="p-5">
+          <div className="py-5">
             <form className="flex w-full" onSubmit={(event) => { event.preventDefault(); handleSendMessage(content); }} > 
               <input 
-                className="w-full outline-none border border-gray-200 px-3 py-1.5 rounded-l-md" 
+                className="w-full outline-none border border-white/10 px-3 py-1.5 rounded-l-md" 
                 placeholder="Type message here..." 
                 value={content} 
                 onChange={(event) => setContent(event.target.value)} />

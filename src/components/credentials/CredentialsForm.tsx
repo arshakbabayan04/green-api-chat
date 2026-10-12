@@ -1,3 +1,5 @@
+import Input from "../ui/Input";
+
 interface CredentialsFormProps { 
   idInstance: string; 
   apiTokenInstance: string; 
@@ -26,59 +28,24 @@ const CredentialsForm = ({ idInstance, apiTokenInstance, chatId, onIdInstanceCha
             Enter your credentials to open a chat
           </p>
         </div>
-        <div>
-          <label
-            htmlFor="idInstance"
-            className="block text-white text-sm mb-2"
-          >
-            ID Instance
-          </label>
-          <input
-            id="idInstance"
-            type="text"
-            value={idInstance}
-            onChange={(event) => onIdInstanceChange(event.target.value)}
-            required
-            placeholder="Enter your idInstance"
-            className="w-full bg-[#00A63E]/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/40 placeholder:text-sm focus:outline-none focus:border-green-600 transition"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="apiTokenInstance"
-            className="block text-white text-sm mb-2"
-          >
-            API Token Instance
-          </label>
-          <input
-            id="apiTokenInstance"
-            type="text"
-            value={apiTokenInstance}
-            onChange={(event) =>
-              onApiTokenInstanceChange(event.target.value)
-            }
-            required
-            placeholder="Enter your API token"
-            className="w-full bg-[#00A63E]/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/40 placeholder:text-sm focus:outline-none focus:border-green-600 transition"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="chatId"
-            className="block text-white text-sm mb-2"
-          >
-            Recipient Chat ID
-          </label>
-          <input
-            id="chatId"
-            type="text"
-            value={chatId}
-            onChange={(event) => onChatIdChange(event.target.value)}
-            required
-            placeholder="Enter recipient chat ID"
-            className="w-full bg-[#00A63E]/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/40 placeholder:text-sm focus:outline-none focus:border-green-600 transition"
-          />
-        </div>
+        <Input
+          id="idInstance"
+          type="text"
+          value={idInstance}
+          onChangeFunc={onIdInstanceChange}
+        />
+        <Input
+          id="apiTokenInstance"
+          type="password"
+          value={apiTokenInstance}
+          onChangeFunc={onApiTokenInstanceChange}
+        />
+        <Input
+          id="chatId"
+          type="text"
+          value={chatId}
+          onChangeFunc={onChatIdChange}
+        />
         <div className="flex items-center justify-between gap-4">
           <p className="text-xs md:text-sm text-white/60">
             Your API token stays in the current app session.

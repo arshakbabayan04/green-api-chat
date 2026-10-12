@@ -14,7 +14,7 @@ function App() {
   }
 
   return (
-    <div className="App bg-black text-white h-screen flex items-center justify-center">
+    <div className="app bg-black text-white h-screen flex items-center justify-center">
       {
         !isChatOpen ? <CredentialsForm 
           idInstance={idInstance}
