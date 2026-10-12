@@ -4,7 +4,7 @@ A minimalist responsive chat application built with React and TypeScript, using 
 
 ## Live Demo
 
-[Open the application](YOUR_VERCEL_URL)
+[Open the application](https://green-chat-six.vercel.app/)
 
 ## Features
 
