@@ -1,75 +1,83 @@
-# React + TypeScript + Vite
+# GREEN-API Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimalist responsive chat application built with React and TypeScript, using GREEN-API for messaging.
 
-Currently, two official plugins are available:
+## Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[Open the application](YOUR_VERCEL_URL)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Send text messages
+- Receive incoming text messages
+- Responsive chat interface
+- Telegram integration through GREEN-API
+- User-provided API credentials and recipient chat ID
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React
+- TypeScript
+- Tailwind CSS
+- GREEN-API
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js and npm
+- GREEN-API instance credentials
+- A Telegram chat ID supported by the configured integration
 
-```
+### Installation
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+1. Clone the repository:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   ```bash
+   git clone YOUR_GITHUB_REPOSITORY_URL
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Navigate to the project directory:
 
-```
+   ```bash
+   cd YOUR_PROJECT_DIRECTORY
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open the local URL displayed in the terminal.
+
+## Usage
+
+1. Enter your GREEN-API instance ID.
+2. Enter your API token.
+3. Enter the recipient's Telegram chat ID.
+4. Open the chat and send a text message.
+
+## Known Limitations
+
+### API Availability
+
+During final testing, the GREEN-API returned error 466, and I was unable to access my account to continue testing. The exact cause of the issue could not be confirmed.
+
+Sending and receiving text messages worked during earlier tests, but I could not complete a final end-to-end verification.
+
+### Recipient Identification
+
+The current implementation uses a Telegram chat ID instead of a phone number. Based on the documentation consulted for the initial integration, the phone-number-based approach available to me was limited to Russian and Belarusian numbers. Since I could not use a number from either country, I implemented chat ID-based recipient identification for my Telegram setup.
+
+Replacing chat ID-based identification with phone-number-based identification should be a straightforward extension, provided the selected integration supports the required phone-number format and recipient lookup method.
+
+## Notes
+
+The API credentials are entered by the user in the application. Do not commit real API tokens or other sensitive credentials to the repository.
