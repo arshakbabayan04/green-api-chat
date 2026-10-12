@@ -10,7 +10,7 @@ input:-webkit-autofill:active {
 }
 
 .app {
-  background-image: url("/chatbg.png");
+  background-image: url("/chatbg.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
